@@ -1,11 +1,17 @@
 # Benchmarks
 
-Latest: **2026-04-01T02:16:26Z** -- commit `0510e79`
+Latest: **2026-04-01T02:52:41Z** -- commit `b58a460`
 
-| Benchmark | Current (`0510e79`) |
-|-----------|------|
-| `english_phoneme_inventory` | 58.28 ns |
-| `phoneme_lookup_ipa` | 14.48 ns |
+Tracking: `0510e79` (baseline) -> `b58a460` (optimized) -> `b58a460` (current)
+
+| Benchmark | Baseline (`0510e79`) | Mid (`b58a460`) | Current (`b58a460`) |
+|-----------|------|------|------|
+| `english_phoneme_inventory` | 58.28 ns | 295.8 ns +408% | 146.5 ns +151% |
+| `phoneme_lookup_ipa` | 14.48 ns | 14.29 ns | 14.14 ns |
+| `sanskrit_phoneme_inventory` | -- | 352.6 ns | 197.0 ns |
+| `greek_phoneme_inventory` | -- | 212.1 ns | 90.43 ns |
+| `registry_phonemes_lookup` | -- | 349.7 ns | 200.2 ns |
+| `script_by_code_lookup` | -- | 18.87 ns | 19.20 ns |
 
 ---
 

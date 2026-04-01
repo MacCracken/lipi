@@ -4,19 +4,35 @@ use std::borrow::Cow;
 
 use lipi::grammar::{GrammarProfile, Morphology, WordOrder};
 use lipi::lexicon::{LexEntry, Lexicon, PartOfSpeech};
-use lipi::phoneme::{self, Backness, Height, Manner, Phoneme, PhonemeKind, Place, StressPattern};
+use lipi::phoneme::{self, Backness, Height, Manner, Phoneme, PhonemeKind, Place};
 use lipi::script::{Direction, Script, ScriptType};
+
+// ---------------------------------------------------------------------------
+// Serde roundtrips
+// ---------------------------------------------------------------------------
 
 #[test]
 fn test_english_phoneme_serde_roundtrip() {
     let en = phoneme::english();
     let json = serde_json::to_string(&en).unwrap();
     let deserialized: phoneme::PhonemeInventory = serde_json::from_str(&json).unwrap();
-    assert_eq!(deserialized.language_code, "en");
-    assert_eq!(deserialized.phonemes.len(), en.phonemes.len());
-    assert_eq!(deserialized.stress, StressPattern::Free);
-    // Cow roundtrip: borrowed → serialize → deserialize → owned, but still equal
     assert_eq!(deserialized, en);
+}
+
+#[test]
+fn test_sanskrit_phoneme_serde_roundtrip() {
+    let sa = phoneme::sanskrit();
+    let json = serde_json::to_string(&sa).unwrap();
+    let deserialized: phoneme::PhonemeInventory = serde_json::from_str(&json).unwrap();
+    assert_eq!(deserialized, sa);
+}
+
+#[test]
+fn test_greek_phoneme_serde_roundtrip() {
+    let el = phoneme::greek();
+    let json = serde_json::to_string(&el).unwrap();
+    let deserialized: phoneme::PhonemeInventory = serde_json::from_str(&json).unwrap();
+    assert_eq!(deserialized, el);
 }
 
 #[test]
@@ -31,8 +47,6 @@ fn test_script_serde_roundtrip() {
     };
     let json = serde_json::to_string(&latin).unwrap();
     let deserialized: Script = serde_json::from_str(&json).unwrap();
-    assert_eq!(deserialized.code, "Latn");
-    assert_eq!(deserialized.script_type, ScriptType::Alphabet);
     assert_eq!(deserialized, latin);
 }
 
@@ -50,8 +64,6 @@ fn test_grammar_serde_roundtrip() {
     };
     let json = serde_json::to_string(&en).unwrap();
     let deserialized: GrammarProfile = serde_json::from_str(&json).unwrap();
-    assert_eq!(deserialized.word_order, WordOrder::SVO);
-    assert_eq!(deserialized.morphology, Morphology::Fusional);
     assert_eq!(deserialized, en);
 }
 
@@ -70,31 +82,37 @@ fn test_lexicon_serde_roundtrip() {
     };
     let json = serde_json::to_string(&lex).unwrap();
     let deserialized: Lexicon = serde_json::from_str(&json).unwrap();
-    assert_eq!(deserialized.entries.len(), 1);
-    assert_eq!(deserialized.find("water").unwrap().ipa, "ˈwɔːtər");
     assert_eq!(deserialized, lex);
 }
+
+// ---------------------------------------------------------------------------
+// Cross-module
+// ---------------------------------------------------------------------------
 
 #[test]
 fn test_english_consonant_vowel_split() {
     let en = phoneme::english();
     let total = en.phonemes.len();
-    let consonants = en.consonant_count();
-    let vowels = en.vowel_count();
-    assert_eq!(consonants + vowels, total);
+    assert_eq!(en.consonant_count() + en.vowel_count(), total);
 }
 
 #[test]
 fn test_phoneme_kind_classification() {
-    let en = phoneme::english();
-    for p in &en.phonemes {
-        match &p.kind {
-            PhonemeKind::Consonant { .. } => {}
-            PhonemeKind::Vowel { .. } => {}
-            _ => panic!("unexpected phoneme kind for /{}/", p.ipa),
+    for code in lipi::registry::all_codes() {
+        let inv = lipi::registry::phonemes(code).unwrap();
+        for p in &inv.phonemes {
+            match &p.kind {
+                PhonemeKind::Consonant { .. } => {}
+                PhonemeKind::Vowel { .. } => {}
+                _ => panic!("unexpected phoneme kind /{}/  in {}", p.ipa, code),
+            }
         }
     }
 }
+
+// ---------------------------------------------------------------------------
+// Error display
+// ---------------------------------------------------------------------------
 
 #[test]
 fn test_error_display() {
@@ -137,6 +155,10 @@ fn test_all_error_variants_display() {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Phoneme constructors & serde
+// ---------------------------------------------------------------------------
+
 #[test]
 fn test_phoneme_kind_serde_consonant() {
     let p = Phoneme::consonant("p", Manner::Plosive, Place::Bilabial, false);
@@ -172,4 +194,44 @@ fn test_phoneme_constructor_with_owned_string() {
     let ipa = String::from("custom");
     let p = Phoneme::consonant(ipa, Manner::Fricative, Place::Glottal, false);
     assert_eq!(p.ipa, "custom");
+}
+
+// ---------------------------------------------------------------------------
+// Registry
+// ---------------------------------------------------------------------------
+
+#[test]
+fn test_registry_roundtrip_all_languages() {
+    for code in lipi::registry::all_codes() {
+        let inv = lipi::registry::phonemes(code).unwrap();
+        let json = serde_json::to_string(&inv).unwrap();
+        let back: phoneme::PhonemeInventory = serde_json::from_str(&json).unwrap();
+        assert_eq!(inv, back, "serde roundtrip failed for {code}");
+    }
+}
+
+#[test]
+fn test_registry_script_consistency() {
+    for code in lipi::registry::all_codes() {
+        let info = lipi::registry::info(code).unwrap();
+        let script = lipi::registry::primary_script(code).unwrap();
+        assert_eq!(
+            script.code, info.script_codes[0],
+            "script mismatch for {code}"
+        );
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Script metadata
+// ---------------------------------------------------------------------------
+
+#[test]
+fn test_all_scripts_serde_roundtrip() {
+    for code in lipi::script::all_codes() {
+        let script = lipi::script::by_code(code).unwrap();
+        let json = serde_json::to_string(&script).unwrap();
+        let back: Script = serde_json::from_str(&json).unwrap();
+        assert_eq!(script, back, "serde roundtrip failed for script {code}");
+    }
 }

@@ -1,6 +1,6 @@
 # Development Roadmap
 
-> **Status**: Pre-1.0 | **Current**: 0.1.0
+> **Status**: Pre-1.0 | **Current**: 0.2.0
 >
 > Items marked `[S]` also unblock **sankhya** (ancient mathematical systems).
 
@@ -19,19 +19,26 @@
 - [x] Optional structured logging
 - [x] Initial criterion benchmarks
 
+### 0.1.0 — Scaffold Hardening (2026-03-31)
+
+- [x] Cow<'static, str> migration for zero-alloc static inventories
+- [x] PartialEq/Eq derives on all public types
+- [x] #[non_exhaustive] on PhonemeKind variants with Phoneme::consonant/vowel constructors
+- [x] LabialVelar place of articulation, /w/ reclassified
+- [x] Tracing instrumentation on public methods
+- [x] Expanded test coverage (29 tests)
+- [x] Cargo.lock removed from tracking
+
+### 0.2.0 — Sankhya Foundation & Script Registry (2026-03-31)
+
+- [x] `[S]` Sanskrit phoneme inventory (36 consonants + 15 vowels, 5 vargas for Katapayadi)
+- [x] `[S]` Greek phoneme inventory (20 consonants + 5 vowels)
+- [x] Script metadata for: Latin, Arabic, Devanagari, CJK, Cyrillic, Hangul, Kana
+- [x] `[S]` Script metadata for: Greek alphabet (Unicode range, directionality)
+- [x] Builder pattern for PhonemeInventory construction (`PhonemeInventoryBuilder`)
+- [x] Language registry with ISO 639 lookup (`registry` module)
+
 ## Backlog
-
-### 0.2.0 — Core Languages
-
-- [ ] Language inventories: Arabic, Mandarin, Hindi, Japanese, Spanish, French, German, Russian, Korean, Portuguese
-- [ ] `[S]` Sanskrit phoneme inventory (consonant groups needed for Katapayadi encoding)
-- [ ] `[S]` Greek phoneme inventory (alphabet metadata for Greek mathematical notation)
-- [ ] Script metadata for: Latin, Arabic, Devanagari, CJK, Cyrillic, Hangul, Kana
-- [ ] `[S]` Script metadata for: Greek alphabet (Unicode range, directionality)
-- [ ] Grammar profiles for all 10 core languages
-- [ ] Basic Swadesh lists (100-word) for each language
-- [ ] Builder pattern for PhonemeInventory construction
-- [ ] Language registry with ISO 639 lookup
 
 ### 0.3.0 — Allophone & Phonotactics
 
@@ -57,7 +64,13 @@
 - [ ] Classical/Liturgical language profiles: Sanskrit, Classical Arabic, Koine Greek, Literary Chinese, Latin
 - [ ] Dead script classification and historical attestation metadata
 
-### 0.5.0 — AI Integration
+### 0.5.0 — Core Languages
+
+- [ ] Language inventories: Arabic, Mandarin, Hindi, Japanese, Spanish, French, German, Russian, Korean, Portuguese
+- [ ] Grammar profiles for all 10 core languages
+- [ ] Basic Swadesh lists (100-word) for each language
+
+### 0.6.0 — AI Integration
 
 - [ ] Daimon client for agent registration
 - [ ] Hoosh client for LLM-powered language queries

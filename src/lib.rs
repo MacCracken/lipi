@@ -42,6 +42,7 @@ pub mod error;
 pub mod grammar;
 pub mod lexicon;
 pub mod phoneme;
+pub mod registry;
 pub mod script;
 
 #[cfg(feature = "logging")]
