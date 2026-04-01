@@ -1,4 +1,7 @@
-//! Lexicon — core vocabulary, Swadesh lists, frequency data.
+//! Lexicon — core vocabulary, Swadesh lists, frequency data,
+//! cognate tracking, and etymology.
+
+pub mod cognate;
 
 use std::borrow::Cow;
 

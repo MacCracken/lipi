@@ -5,6 +5,7 @@
 //! (manner, place, voicing), allophone rules, and phonotactic constraints.
 
 pub mod allophone;
+pub mod inventories;
 pub mod syllable;
 
 use std::borrow::Cow;

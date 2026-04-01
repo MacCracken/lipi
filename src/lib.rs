@@ -42,6 +42,7 @@
 //! - **vansh** (planned) — voice assistant with multilingual TTS/STT
 //! - **sahifa** (planned) — OCR language detection, multilingual document processing
 
+pub mod dialect;
 pub mod error;
 pub mod grammar;
 pub mod lexicon;

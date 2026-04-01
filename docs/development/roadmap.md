@@ -1,6 +1,6 @@
 # Development Roadmap
 
-> **Status**: Pre-1.0 | **Current**: 0.3.0
+> **Status**: Pre-1.0 | **Current**: 0.4.0
 >
 > Items marked `[S]` also unblock **sankhya** (ancient mathematical systems).
 
@@ -46,15 +46,15 @@
 - [x] `[S]` Romanization/transliteration tables (`script::transliteration` — Devanagari↔IAST, Greek↔Beta Code)
 - [x] `[S]` Script-to-numeral mapping API (`script::numerals` — Devanagari digits, Greek isopsephy)
 
+### 0.4.0 — Extended Coverage (2026-03-31)
+
+- [x] `[S]` Yucatec Maya phoneme inventory (21C + 10V, ejectives for Mayan calendar)
+- [x] 11 additional language inventories: Swahili, Yoruba, Zulu, Thai, Vietnamese, Tagalog, Turkish, Finnish, Hawaiian, Nahuatl (14 total languages)
+- [x] Dialect/variety support (`dialect` module — LanguageVariety, VarietyKind, phoneme overlays)
+- [x] Cognate detection types (`lexicon::cognate` — CognateSet, CognateEntry, proto-forms)
+- [x] Loanword tracking and etymology (`Etymology`, `BorrowingType`)
+
 ## Backlog
-
-### 0.4.0 — Extended Coverage
-
-- [ ] 30+ additional languages (African, Southeast Asian, Indigenous American)
-- [ ] `[S]` Yucatec Maya — phoneme inventory, transliteration conventions (day sign / month name validation for Mayan calendar)
-- [ ] Dialect/variety support (e.g., British vs American English, MSA vs Egyptian Arabic)
-- [ ] Cognate detection between related languages
-- [ ] Loanword tracking and etymology markers
 
 ### 0.4.x — Classical & Ancient Scripts
 

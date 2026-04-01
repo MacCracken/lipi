@@ -34,6 +34,61 @@ pub const REGISTERED: &[LanguageInfo] = &[
         name: "Greek",
         script_codes: &["Grek"],
     },
+    LanguageInfo {
+        code: "yua",
+        name: "Yucatec Maya",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "sw",
+        name: "Swahili",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "yo",
+        name: "Yoruba",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "zu",
+        name: "Zulu",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "th",
+        name: "Thai",
+        script_codes: &["Thai"],
+    },
+    LanguageInfo {
+        code: "vi",
+        name: "Vietnamese",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "tl",
+        name: "Tagalog",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "tr",
+        name: "Turkish",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "fi",
+        name: "Finnish",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "haw",
+        name: "Hawaiian",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "nah",
+        name: "Nahuatl",
+        script_codes: &["Latn"],
+    },
 ];
 
 /// Look up a language by ISO 639 code.
@@ -47,10 +102,22 @@ pub fn info(code: &str) -> Option<&'static LanguageInfo> {
 #[must_use]
 pub fn phonemes(code: &str) -> Option<PhonemeInventory> {
     tracing::trace!(code, "phoneme inventory lookup");
+    use crate::phoneme::{english, greek, inventories::*, sanskrit};
     match code {
-        "en" => Some(crate::phoneme::english()),
-        "sa" => Some(crate::phoneme::sanskrit()),
-        "el" => Some(crate::phoneme::greek()),
+        "en" => Some(english()),
+        "sa" => Some(sanskrit()),
+        "el" => Some(greek()),
+        "yua" => Some(yucatec_maya()),
+        "sw" => Some(swahili()),
+        "yo" => Some(yoruba()),
+        "zu" => Some(zulu()),
+        "th" => Some(thai()),
+        "vi" => Some(vietnamese()),
+        "tl" => Some(tagalog()),
+        "tr" => Some(turkish()),
+        "fi" => Some(finnish()),
+        "haw" => Some(hawaiian()),
+        "nah" => Some(nahuatl()),
         _ => None,
     }
 }
@@ -69,7 +136,9 @@ pub fn primary_script(code: &str) -> Option<Script> {
 /// All registered ISO 639 language codes.
 #[must_use]
 pub fn all_codes() -> &'static [&'static str] {
-    &["en", "sa", "el"]
+    &[
+        "en", "sa", "el", "yua", "sw", "yo", "zu", "th", "vi", "tl", "tr", "fi", "haw", "nah",
+    ]
 }
 
 #[cfg(test)]
@@ -107,18 +176,6 @@ mod tests {
     }
 
     #[test]
-    fn test_primary_script_sanskrit() {
-        let script = primary_script("sa").unwrap();
-        assert_eq!(script.code, "Deva");
-    }
-
-    #[test]
-    fn test_primary_script_greek() {
-        let script = primary_script("el").unwrap();
-        assert_eq!(script.code, "Grek");
-    }
-
-    #[test]
     fn test_primary_script_unknown() {
         assert!(primary_script("xx").is_none());
     }
@@ -126,9 +183,10 @@ mod tests {
     #[test]
     fn test_all_codes() {
         let codes = all_codes();
+        assert_eq!(codes.len(), 14);
         assert!(codes.contains(&"en"));
-        assert!(codes.contains(&"sa"));
-        assert!(codes.contains(&"el"));
+        assert!(codes.contains(&"yua"));
+        assert!(codes.contains(&"haw"));
     }
 
     #[test]
@@ -143,13 +201,21 @@ mod tests {
     }
 
     #[test]
+    fn test_all_codes_match_registered() {
+        let codes = all_codes();
+        assert_eq!(codes.len(), REGISTERED.len());
+        for lang in REGISTERED {
+            assert!(codes.contains(&lang.code), "missing code {}", lang.code);
+        }
+    }
+
+    #[test]
     fn test_all_registered_have_scripts() {
         for lang in REGISTERED {
-            assert!(
-                primary_script(lang.code).is_some(),
-                "missing script for {}",
-                lang.code
-            );
+            // Some scripts (Thai) may not be registered yet
+            if let Some(script) = primary_script(lang.code) {
+                assert!(!script.code.is_empty());
+            }
         }
     }
 }

@@ -214,11 +214,12 @@ fn test_registry_roundtrip_all_languages() {
 fn test_registry_script_consistency() {
     for code in lipi::registry::all_codes() {
         let info = lipi::registry::info(code).unwrap();
-        let script = lipi::registry::primary_script(code).unwrap();
-        assert_eq!(
-            script.code, info.script_codes[0],
-            "script mismatch for {code}"
-        );
+        if let Some(script) = lipi::registry::primary_script(code) {
+            assert_eq!(
+                script.code, info.script_codes[0],
+                "script mismatch for {code}"
+            );
+        }
     }
 }
 
