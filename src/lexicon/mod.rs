@@ -1,16 +1,18 @@
 //! Lexicon — core vocabulary, Swadesh lists, frequency data.
 
+use std::borrow::Cow;
+
 use serde::{Deserialize, Serialize};
 
 /// A lexical entry — one word in one language.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LexEntry {
     /// The word in its native script.
-    pub word: String,
+    pub word: Cow<'static, str>,
     /// IPA transcription.
-    pub ipa: String,
+    pub ipa: Cow<'static, str>,
     /// English gloss.
-    pub gloss: String,
+    pub gloss: Cow<'static, str>,
     /// Part of speech.
     pub pos: PartOfSpeech,
     /// Frequency rank (lower = more common). None if unknown.
@@ -37,10 +39,10 @@ pub enum PartOfSpeech {
 }
 
 /// A language's lexicon.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Lexicon {
     /// ISO 639 language code.
-    pub language_code: String,
+    pub language_code: Cow<'static, str>,
     /// All entries.
     pub entries: Vec<LexEntry>,
 }
@@ -49,12 +51,14 @@ impl Lexicon {
     /// Look up a word by its native form.
     #[must_use]
     pub fn find(&self, word: &str) -> Option<&LexEntry> {
+        tracing::trace!(language = %self.language_code, word, "lexicon lookup");
         self.entries.iter().find(|e| e.word == word)
     }
 
     /// Get all Swadesh list entries, sorted by index.
     #[must_use]
     pub fn swadesh(&self) -> Vec<&LexEntry> {
+        tracing::trace!(language = %self.language_code, "extracting Swadesh list");
         let mut result: Vec<_> = self
             .entries
             .iter()
@@ -67,6 +71,7 @@ impl Lexicon {
     /// Get the N most frequent words.
     #[must_use]
     pub fn most_frequent(&self, n: usize) -> Vec<&LexEntry> {
+        tracing::trace!(language = %self.language_code, n, "frequency ranking");
         let mut ranked: Vec<_> = self
             .entries
             .iter()
@@ -83,28 +88,28 @@ mod tests {
 
     fn sample_lexicon() -> Lexicon {
         Lexicon {
-            language_code: "en".into(),
+            language_code: Cow::Borrowed("en"),
             entries: vec![
                 LexEntry {
-                    word: "water".into(),
-                    ipa: "ˈwɔːtər".into(),
-                    gloss: "water".into(),
+                    word: Cow::Borrowed("water"),
+                    ipa: Cow::Borrowed("ˈwɔːtər"),
+                    gloss: Cow::Borrowed("water"),
                     pos: PartOfSpeech::Noun,
                     frequency_rank: Some(250),
                     swadesh_index: Some(1),
                 },
                 LexEntry {
-                    word: "fire".into(),
-                    ipa: "ˈfaɪər".into(),
-                    gloss: "fire".into(),
+                    word: Cow::Borrowed("fire"),
+                    ipa: Cow::Borrowed("ˈfaɪər"),
+                    gloss: Cow::Borrowed("fire"),
                     pos: PartOfSpeech::Noun,
                     frequency_rank: Some(800),
                     swadesh_index: Some(2),
                 },
                 LexEntry {
-                    word: "the".into(),
-                    ipa: "ðə".into(),
-                    gloss: "the (definite article)".into(),
+                    word: Cow::Borrowed("the"),
+                    ipa: Cow::Borrowed("ðə"),
+                    gloss: Cow::Borrowed("the (definite article)"),
                     pos: PartOfSpeech::Determiner,
                     frequency_rank: Some(1),
                     swadesh_index: None,
@@ -134,5 +139,30 @@ mod tests {
         let freq = lex.most_frequent(2);
         assert_eq!(freq[0].word, "the");
         assert_eq!(freq[1].word, "water");
+    }
+
+    #[test]
+    fn test_find_empty_lexicon() {
+        let lex = Lexicon {
+            language_code: Cow::Borrowed("xx"),
+            entries: vec![],
+        };
+        assert!(lex.find("anything").is_none());
+        assert!(lex.swadesh().is_empty());
+        assert!(lex.most_frequent(10).is_empty());
+    }
+
+    #[test]
+    fn test_lex_entry_eq() {
+        let a = LexEntry {
+            word: Cow::Borrowed("cat"),
+            ipa: Cow::Borrowed("kæt"),
+            gloss: Cow::Borrowed("cat"),
+            pos: PartOfSpeech::Noun,
+            frequency_rank: Some(500),
+            swadesh_index: None,
+        };
+        let b = a.clone();
+        assert_eq!(a, b);
     }
 }

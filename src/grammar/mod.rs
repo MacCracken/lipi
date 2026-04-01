@@ -1,5 +1,7 @@
 //! Grammar — morphological typology, word order, case systems.
 
+use std::borrow::Cow;
+
 use serde::{Deserialize, Serialize};
 
 /// Morphological typology.
@@ -20,20 +22,20 @@ pub enum Morphology {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum WordOrder {
-    SVO, // English, French, Mandarin
-    SOV, // Japanese, Korean, Hindi, Turkish
-    VSO, // Arabic, Irish, Welsh
-    VOS, // Malagasy, Fijian
-    OVS, // Hixkaryana
-    OSV, // Rare
+    SVO,  // English, French, Mandarin
+    SOV,  // Japanese, Korean, Hindi, Turkish
+    VSO,  // Arabic, Irish, Welsh
+    VOS,  // Malagasy, Fijian
+    OVS,  // Hixkaryana
+    OSV,  // Rare
     Free, // Latin, Russian (case-marked)
 }
 
 /// A language's grammatical profile.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct GrammarProfile {
     /// ISO 639 language code.
-    pub language_code: String,
+    pub language_code: Cow<'static, str>,
     /// Morphological typology.
     pub morphology: Morphology,
     /// Dominant word order.
@@ -57,10 +59,10 @@ mod tests {
     #[test]
     fn test_english_grammar() {
         let en = GrammarProfile {
-            language_code: "en".into(),
+            language_code: Cow::Borrowed("en"),
             morphology: Morphology::Fusional,
             word_order: WordOrder::SVO,
-            case_count: 2, // subjective/objective (I/me, he/him)
+            case_count: 2,     // subjective/objective (I/me, he/him)
             has_gender: false, // no grammatical gender on nouns
             gender_count: 0,
             has_dual: false,
@@ -72,7 +74,7 @@ mod tests {
     #[test]
     fn test_japanese_grammar() {
         let ja = GrammarProfile {
-            language_code: "ja".into(),
+            language_code: Cow::Borrowed("ja"),
             morphology: Morphology::Agglutinative,
             word_order: WordOrder::SOV,
             case_count: 0, // particles, not case inflection
@@ -88,7 +90,7 @@ mod tests {
     #[test]
     fn test_arabic_grammar() {
         let ar = GrammarProfile {
-            language_code: "ar".into(),
+            language_code: Cow::Borrowed("ar"),
             morphology: Morphology::Fusional,
             word_order: WordOrder::VSO,
             case_count: 3, // nominative, accusative, genitive

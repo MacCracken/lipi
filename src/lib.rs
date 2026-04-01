@@ -39,10 +39,10 @@
 //! - **sahifa** (planned) — OCR language detection, multilingual document processing
 
 pub mod error;
-pub mod phoneme;
-pub mod script;
 pub mod grammar;
 pub mod lexicon;
+pub mod phoneme;
+pub mod script;
 
 #[cfg(feature = "logging")]
 pub mod logging;

@@ -1,5 +1,7 @@
 //! Writing systems — alphabet, syllabary, logographic, abjad, abugida.
 
+use std::borrow::Cow;
+
 use serde::{Deserialize, Serialize};
 
 /// Writing system classification.
@@ -32,12 +34,12 @@ pub enum Direction {
 }
 
 /// A writing system's metadata.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Script {
     /// ISO 15924 code (e.g., "Latn", "Arab", "Deva").
-    pub code: String,
+    pub code: Cow<'static, str>,
     /// Human name (e.g., "Latin", "Arabic", "Devanagari").
-    pub name: String,
+    pub name: Cow<'static, str>,
     /// Classification.
     pub script_type: ScriptType,
     /// Primary text direction.
@@ -45,7 +47,7 @@ pub struct Script {
     /// Unicode block ranges (start, end) for this script.
     pub unicode_ranges: Vec<(u32, u32)>,
     /// Languages that use this script.
-    pub languages: Vec<String>,
+    pub languages: Vec<Cow<'static, str>>,
 }
 
 #[cfg(test)]
@@ -54,14 +56,18 @@ mod tests {
 
     #[test]
     fn test_script_types() {
-        // Smoke test — types are constructible
         let latin = Script {
-            code: "Latn".into(),
-            name: "Latin".into(),
+            code: Cow::Borrowed("Latn"),
+            name: Cow::Borrowed("Latin"),
             script_type: ScriptType::Alphabet,
             direction: Direction::LeftToRight,
             unicode_ranges: vec![(0x0041, 0x005A), (0x0061, 0x007A)],
-            languages: vec!["en".into(), "fr".into(), "es".into(), "de".into()],
+            languages: vec![
+                Cow::Borrowed("en"),
+                Cow::Borrowed("fr"),
+                Cow::Borrowed("es"),
+                Cow::Borrowed("de"),
+            ],
         };
         assert_eq!(latin.script_type, ScriptType::Alphabet);
         assert_eq!(latin.direction, Direction::LeftToRight);
@@ -70,12 +76,16 @@ mod tests {
     #[test]
     fn test_arabic_rtl() {
         let arabic = Script {
-            code: "Arab".into(),
-            name: "Arabic".into(),
+            code: Cow::Borrowed("Arab"),
+            name: Cow::Borrowed("Arabic"),
             script_type: ScriptType::Abjad,
             direction: Direction::RightToLeft,
             unicode_ranges: vec![(0x0600, 0x06FF)],
-            languages: vec!["ar".into(), "fa".into(), "ur".into()],
+            languages: vec![
+                Cow::Borrowed("ar"),
+                Cow::Borrowed("fa"),
+                Cow::Borrowed("ur"),
+            ],
         };
         assert_eq!(arabic.direction, Direction::RightToLeft);
         assert_eq!(arabic.script_type, ScriptType::Abjad);

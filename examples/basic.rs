@@ -18,6 +18,7 @@ fn main() {
             manner: lipi::phoneme::Manner::Fricative,
             place,
             voiced,
+            ..
         } = &p.kind
         {
             println!(
