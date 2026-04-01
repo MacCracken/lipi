@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-03-31
+
+### Added
+
+- **mcp** — MCP tool definitions (feature-gated `mcp`): `lipi_phonemes`, `lipi_script`, `lipi_grammar`, `lipi_translate_ipa`, `lipi_compare`. Tool registry with `tool_definitions()`, `invoke()` dispatcher, JSON-serializable `ToolResult`. Language comparison computes shared/unique phonemes and grammar differences
+- **daimon** — Agent registration for AGNOS framework (feature-gated `daimon`): `AgentRegistration` with 6 capabilities, dynamic language/script coverage from registry. Version auto-synced from Cargo.toml
+- **hoosh** — LLM query interface (feature-gated `hoosh`): `LanguageQuery` enum (5 query types), `QueryResponse`, `ResponseSource`. `answer_from_data()` handles phoneme/comparison queries without LLM, returns `None` for queries requiring inference
+- Feature gates: `mcp`, `daimon`, `hoosh` (all included in `full`)
+
 ## [0.5.0] - 2026-03-31
 
 ### Added

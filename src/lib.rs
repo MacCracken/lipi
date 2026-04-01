@@ -55,4 +55,13 @@ pub mod script;
 #[cfg(feature = "logging")]
 pub mod logging;
 
+#[cfg(feature = "mcp")]
+pub mod mcp;
+
+#[cfg(feature = "daimon")]
+pub mod daimon;
+
+#[cfg(feature = "hoosh")]
+pub mod hoosh;
+
 pub use error::LipiError;

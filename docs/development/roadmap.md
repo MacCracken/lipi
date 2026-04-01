@@ -1,6 +1,6 @@
 # Development Roadmap
 
-> **Status**: Pre-1.0 | **Current**: 0.5.0
+> **Status**: Pre-1.0 | **Current**: 0.6.0
 >
 > Items marked `[S]` also unblock **sankhya** (ancient mathematical systems).
 
@@ -68,13 +68,11 @@
 - [x] Grammar profiles for all 10 core languages (`grammar::by_code()`)
 - [x] Swadesh-25 starter lists for each language (`lexicon::swadesh::by_code()`, 250 entries)
 
-## Backlog
+### 0.6.0 — AI Integration (2026-03-31)
 
-### 0.6.0 — AI Integration
-
-- [ ] Daimon client for agent registration
-- [ ] Hoosh client for LLM-powered language queries
-- [ ] MCP tools: `lipi_phonemes`, `lipi_script`, `lipi_grammar`, `lipi_translate_ipa`, `lipi_compare`
+- [x] MCP tools: `lipi_phonemes`, `lipi_script`, `lipi_grammar`, `lipi_translate_ipa`, `lipi_compare` (feature-gated `mcp`)
+- [x] Daimon agent registration: `AgentRegistration` with 6 capabilities (feature-gated `daimon`)
+- [x] Hoosh LLM query interface: `LanguageQuery`, `answer_from_data()` for data-only resolution (feature-gated `hoosh`)
 
 ## Future (demand-gated)
 
