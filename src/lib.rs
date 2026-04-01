@@ -7,16 +7,18 @@
 //!
 //! # Architecture
 //!
-//! Four domain modules:
+//! Five modules:
 //!
 //! - [`phoneme`] — IPA phoneme inventories per language, phonological features
-//!   (manner, place, voicing), allophone rules, stress/tone patterns
+//!   (manner, place, voicing), stress/tone patterns, builder pattern
 //! - [`script`] — Writing system metadata: alphabet, syllabary, logographic,
-//!   abjad, abugida. Character ranges, directionality, romanization tables
+//!   abjad, abugida. Unicode ranges, directionality, lookup by ISO 15924 code
 //! - [`grammar`] — Morphological typology (isolating, agglutinative, fusional),
-//!   word order (SVO/SOV/VSO), case systems, verb conjugation patterns
+//!   word order (SVO/SOV/VSO), case systems
 //! - [`lexicon`] — Core vocabulary per language (Swadesh lists, frequency-ranked
-//!   word lists), cognate detection, loanword tracking
+//!   word lists)
+//! - [`registry`] — Language registry: look up phoneme inventories and scripts
+//!   by ISO 639 code
 //!
 //! # Relationship to Other Crates
 //!

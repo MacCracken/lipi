@@ -68,8 +68,8 @@ pub fn primary_script(code: &str) -> Option<Script> {
 
 /// All registered ISO 639 language codes.
 #[must_use]
-pub fn all_codes() -> Vec<&'static str> {
-    REGISTERED.iter().map(|l| l.code).collect()
+pub fn all_codes() -> &'static [&'static str] {
+    &["en", "sa", "el"]
 }
 
 #[cfg(test)]

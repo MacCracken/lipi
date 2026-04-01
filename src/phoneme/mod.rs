@@ -65,7 +65,7 @@ pub enum Backness {
 }
 
 /// A phoneme with its IPA symbol and articulatory features.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct Phoneme {
     /// IPA symbol (e.g., "p", "ʃ", "æ").
@@ -113,7 +113,7 @@ impl Phoneme {
 }
 
 /// Classification of a phoneme.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum PhonemeKind {
     #[non_exhaustive]
@@ -295,8 +295,20 @@ impl PhonemeInventoryBuilder {
     }
 
     /// Consume the builder and produce the inventory.
+    ///
+    /// # Panics (debug only)
+    ///
+    /// Panics in debug builds if duplicate IPA symbols are detected.
     #[must_use]
     pub fn build(self) -> PhonemeInventory {
+        debug_assert!(
+            {
+                let mut seen = std::collections::HashSet::new();
+                self.phonemes.iter().all(|p| seen.insert(&p.ipa))
+            },
+            "duplicate IPA symbol in {} inventory",
+            self.language_code
+        );
         tracing::debug!(
             language = %self.language_code,
             phonemes = self.phonemes.len(),
@@ -386,7 +398,7 @@ pub fn sanskrit() -> PhonemeInventory {
     use Manner::*;
     use Place::*;
 
-    PhonemeInventoryBuilder::with_capacity("sa", "Sanskrit", 51)
+    PhonemeInventoryBuilder::with_capacity("sa", "Sanskrit", 50)
         .stress(StressPattern::PitchAccent)
         // --- Sparsha (stop/plosive) consonants: 5 vargas × 5 ---
         // Kavarga (velar)
@@ -431,8 +443,9 @@ pub fn sanskrit() -> PhonemeInventory {
         .consonant("ɦ", Fricative, Glottal, true)
         // --- Additional ---
         .consonant("ɭ", LateralApproximant, Retroflex, true) // Vedic ḷ
-        .consonant("kʂ", Affricate, Velar, false) // kṣa
-        .consonant("d͡ʑɲ", Affricate, Palatal, true) // jña
+        // Conjuncts (phonologically biphonemic, but single aksharas for Katapayadi)
+        .consonant("kʂ", Affricate, Velar, false) // kṣa (k+ṣ)
+        .consonant("d͡ʑɲ", Affricate, Palatal, true) // jña (jñ)
         // --- Vowels (svara) ---
         // Short
         .vowel("ɐ", NearOpen, Central, false) // a

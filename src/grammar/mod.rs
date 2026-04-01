@@ -5,7 +5,7 @@ use std::borrow::Cow;
 use serde::{Deserialize, Serialize};
 
 /// Morphological typology.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum Morphology {
     /// Words are mostly invariant, grammar via word order (e.g., Mandarin, Vietnamese).
@@ -19,7 +19,7 @@ pub enum Morphology {
 }
 
 /// Dominant word order.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum WordOrder {
     SVO,  // English, French, Mandarin

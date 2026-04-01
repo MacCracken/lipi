@@ -25,7 +25,7 @@ pub enum ScriptType {
 }
 
 /// Text directionality.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum Direction {
     LeftToRight,
@@ -220,12 +220,12 @@ pub fn hangul() -> Script {
     }
 }
 
-/// Katakana + Hiragana (ISO 15924: Kana).
+/// Japanese kana — Hiragana + Katakana (ISO 15924: Kana).
 #[must_use]
 pub fn kana() -> Script {
     Script {
         code: Cow::Borrowed("Kana"),
-        name: Cow::Borrowed("Katakana"),
+        name: Cow::Borrowed("Kana (Hiragana + Katakana)"),
         script_type: ScriptType::Syllabary,
         direction: Direction::LeftToRight,
         unicode_ranges: vec![
