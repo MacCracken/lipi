@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-03-31
+
+### Added
+
+- **phoneme::inventories** — 24 additional language inventories reaching 51 total:
+  - European: Italian (23C+7V), Dutch (19C+13V), Polish (29C+6V), Czech (25C+10V), Hungarian (25C+14V), Romanian (21C+7V), Icelandic (22C+8V)
+  - South Asian: Bengali (30C+7V), Tamil (19C+10V), Urdu (37C+10V)
+  - African: Amharic (27C+7V), Hausa (25C+10V), Somali (22C+10V), Wolof (25C+8V)
+  - Southeast Asian: Indonesian (18C+6V), Burmese (30C+7V), Khmer (24C+18V), Lao (20C+9V)
+  - Middle East/Caucasus: Persian (23C+6V), Hebrew (23C+5V), Georgian (28C+5V)
+  - Americas: Quechua (24C+3V), Guarani (16C+12V)
+  - Central Asian: Mongolian (21C+14V)
+- **grammar** — English grammar profile added (`grammar::by_code("en")`)
+- **docs** — Usage guide (docs/guides/usage.md) with 15 sections and code examples
+- **docs** — Architecture overview fully updated for all modules and 51 languages
+
+### Changed
+
+- **registry** — 51 languages registered (up from 27)
+- v1.0 criteria: test coverage measured at 98.53%, all documentation complete
+
 ## [0.6.0] - 2026-03-31
 
 ### Added

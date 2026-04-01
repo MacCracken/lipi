@@ -120,6 +120,21 @@ pub const REGISTERED: &[LanguageInfo] = &[
         script_codes: &["Deva"],
     },
     LanguageInfo {
+        code: "bn",
+        name: "Bengali",
+        script_codes: &["Deva"],
+    },
+    LanguageInfo {
+        code: "ta",
+        name: "Tamil",
+        script_codes: &["Taml"],
+    },
+    LanguageInfo {
+        code: "ur",
+        name: "Urdu",
+        script_codes: &["Arab"],
+    },
+    LanguageInfo {
         code: "ja",
         name: "Japanese",
         script_codes: &["Kana"],
@@ -153,6 +168,111 @@ pub const REGISTERED: &[LanguageInfo] = &[
         code: "pt",
         name: "Portuguese",
         script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "it",
+        name: "Italian",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "nl",
+        name: "Dutch",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "pl",
+        name: "Polish",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "am",
+        name: "Amharic",
+        script_codes: &["Ethi"],
+    },
+    LanguageInfo {
+        code: "ha",
+        name: "Hausa",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "id",
+        name: "Indonesian",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "fa",
+        name: "Persian",
+        script_codes: &["Arab"],
+    },
+    LanguageInfo {
+        code: "he",
+        name: "Hebrew",
+        script_codes: &["Hebr"],
+    },
+    LanguageInfo {
+        code: "ka",
+        name: "Georgian",
+        script_codes: &["Geor"],
+    },
+    LanguageInfo {
+        code: "cs",
+        name: "Czech",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "hu",
+        name: "Hungarian",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "ro",
+        name: "Romanian",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "my",
+        name: "Burmese",
+        script_codes: &["Mymr"],
+    },
+    LanguageInfo {
+        code: "km",
+        name: "Khmer",
+        script_codes: &["Khmr"],
+    },
+    LanguageInfo {
+        code: "so",
+        name: "Somali",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "qu",
+        name: "Quechua",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "gn",
+        name: "Guarani",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "is",
+        name: "Icelandic",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "wo",
+        name: "Wolof",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "lo",
+        name: "Lao",
+        script_codes: &["Laoo"],
+    },
+    LanguageInfo {
+        code: "mn",
+        name: "Mongolian",
+        script_codes: &["Cyrl"],
     },
 ];
 
@@ -189,6 +309,9 @@ pub fn phonemes(code: &str) -> Option<PhonemeInventory> {
         "lzh" => Some(literary_chinese()),
         "zh" => Some(mandarin()),
         "hi" => Some(hindi()),
+        "bn" => Some(bengali()),
+        "ta" => Some(tamil()),
+        "ur" => Some(urdu()),
         "ja" => Some(japanese()),
         "es" => Some(spanish()),
         "fr" => Some(french()),
@@ -196,6 +319,27 @@ pub fn phonemes(code: &str) -> Option<PhonemeInventory> {
         "ru" => Some(russian()),
         "ko" => Some(korean()),
         "pt" => Some(portuguese()),
+        "it" => Some(italian()),
+        "nl" => Some(dutch()),
+        "pl" => Some(polish()),
+        "am" => Some(amharic()),
+        "ha" => Some(hausa()),
+        "id" => Some(indonesian()),
+        "fa" => Some(persian()),
+        "he" => Some(hebrew()),
+        "ka" => Some(georgian()),
+        "cs" => Some(czech()),
+        "hu" => Some(hungarian()),
+        "ro" => Some(romanian()),
+        "my" => Some(burmese()),
+        "km" => Some(khmer()),
+        "so" => Some(somali()),
+        "qu" => Some(quechua()),
+        "gn" => Some(guarani()),
+        "is" => Some(icelandic()),
+        "wo" => Some(wolof()),
+        "lo" => Some(lao()),
+        "mn" => Some(mongolian()),
         _ => None,
     }
 }
@@ -216,7 +360,9 @@ pub fn primary_script(code: &str) -> Option<Script> {
 pub fn all_codes() -> &'static [&'static str] {
     &[
         "en", "sa", "el", "yua", "sw", "yo", "zu", "th", "vi", "tl", "tr", "fi", "haw", "nah",
-        "la", "ar", "grc", "lzh", "zh", "hi", "ja", "es", "fr", "de", "ru", "ko", "pt",
+        "la", "ar", "grc", "lzh", "zh", "hi", "bn", "ta", "ur", "ja", "es", "fr", "de", "ru", "ko",
+        "pt", "it", "nl", "pl", "am", "ha", "id", "fa", "he", "ka", "cs", "hu", "ro", "my", "km",
+        "so", "qu", "gn", "is", "wo", "lo", "mn",
     ]
 }
 
@@ -262,7 +408,7 @@ mod tests {
     #[test]
     fn test_all_codes() {
         let codes = all_codes();
-        assert_eq!(codes.len(), 27);
+        assert_eq!(codes.len(), 51);
         assert!(codes.contains(&"en"));
         assert!(codes.contains(&"yua"));
         assert!(codes.contains(&"haw"));

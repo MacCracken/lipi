@@ -1,17 +1,17 @@
 # Benchmarks
 
-Latest: **2026-04-01T05:23:53Z** -- commit `b3c80a8`
+Latest: **2026-04-01T06:10:58Z** -- commit `aadcd67`
 
-Tracking: `0510e79` (baseline) -> `163aa00` (optimized) -> `b3c80a8` (current)
+Tracking: `0510e79` (baseline) -> `163aa00` (optimized) -> `aadcd67` (current)
 
-| Benchmark | Baseline (`0510e79`) | Mid (`163aa00`) | Current (`b3c80a8`) |
+| Benchmark | Baseline (`0510e79`) | Mid (`163aa00`) | Current (`aadcd67`) |
 |-----------|------|------|------|
-| `english_phoneme_inventory` | 58.28 ns | 157.0 ns +169% | 168.2 ns +189% |
-| `phoneme_lookup_ipa` | 14.48 ns | 15.92 ns +10% | 17.47 ns +21% |
-| `sanskrit_phoneme_inventory` | -- | 208.0 ns | 223.1 ns |
-| `greek_phoneme_inventory` | -- | 91.78 ns | 95.57 ns |
-| `registry_phonemes_lookup` | -- | 225.3 ns | 236.3 ns |
-| `script_by_code_lookup` | -- | 19.44 ns | 22.64 ns |
+| `english_phoneme_inventory` | 58.28 ns | 157.0 ns +169% | 143.5 ns +146% |
+| `phoneme_lookup_ipa` | 14.48 ns | 15.92 ns +10% | 14.53 ns |
+| `sanskrit_phoneme_inventory` | -- | 208.0 ns | 196.1 ns |
+| `greek_phoneme_inventory` | -- | 91.78 ns | 89.78 ns |
+| `registry_phonemes_lookup` | -- | 225.3 ns | 209.7 ns |
+| `script_by_code_lookup` | -- | 19.44 ns | 19.64 ns |
 
 ---
 

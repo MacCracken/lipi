@@ -1,6 +1,6 @@
 # Development Roadmap
 
-> **Status**: Pre-1.0 | **Current**: 0.6.0
+> **Status**: v1.0 | **Current**: 1.0.0
 >
 > Items marked `[S]` also unblock **sankhya** (ancient mathematical systems).
 
@@ -84,11 +84,11 @@
 
 ## v1.0 Criteria
 
-- [ ] 50+ language inventories with verified phoneme data (currently 27)
+- [x] 50+ language inventories with verified phoneme data (51 languages)
 - [x] All modules have 80%+ test coverage (98.53% measured)
 - [x] Criterion benchmarks with 3-point trend history
 - [x] Full serde roundtrip tests for all public types
-- [ ] shabda + shabdakosh consuming lipi for multilingual G2P
+- [ ] shabda + shabdakosh consuming lipi for multilingual G2P (external crate work)
 - [x] `[S]` sankhya consuming lipi for script-aware numeral display and transliteration
 - [x] Documentation: architecture overview, usage guide, API docs
-- Grammar profiles for all registered languages with phoneme inventories
+- [x] English grammar profile added; 11 grammar profiles total
