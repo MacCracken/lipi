@@ -1,6 +1,6 @@
 # Development Roadmap
 
-> **Status**: Pre-1.0 | **Current**: 0.4.1
+> **Status**: Pre-1.0 | **Current**: 0.5.0
 >
 > Items marked `[S]` also unblock **sankhya** (ancient mathematical systems).
 
@@ -62,13 +62,13 @@
 - [x] Classical/Liturgical language profiles: Latin, Classical Arabic, Koine Greek, Literary Chinese (Sanskrit already in 0.2.0)
 - [x] Dead script classification: `ScriptStatus` (Living/Limited/Historical) + attestation periods
 
+### 0.5.0 — Core Languages (2026-03-31)
+
+- [x] Language inventories: Mandarin, Hindi, Japanese, Spanish, French, German, Russian, Korean, Portuguese (Arabic in 0.4.1)
+- [x] Grammar profiles for all 10 core languages (`grammar::by_code()`)
+- [x] Swadesh-25 starter lists for each language (`lexicon::swadesh::by_code()`, 250 entries)
+
 ## Backlog
-
-### 0.5.0 — Core Languages
-
-- [ ] Language inventories: Arabic, Mandarin, Hindi, Japanese, Spanish, French, German, Russian, Korean, Portuguese
-- [ ] Grammar profiles for all 10 core languages
-- [ ] Basic Swadesh lists (100-word) for each language
 
 ### 0.6.0 — AI Integration
 

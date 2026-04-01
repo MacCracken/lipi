@@ -773,6 +773,528 @@ pub fn literary_chinese() -> PhonemeInventory {
         .build()
 }
 
+// ---------------------------------------------------------------------------
+// Major world languages
+// ---------------------------------------------------------------------------
+
+/// Build the Mandarin Chinese (Standard/Putonghua) phoneme inventory.
+///
+/// Based on the standard Pinyin analysis: 21 initial consonants + 7 vowel nuclei.
+/// Tonal: 4 lexical tones + neutral tone.
+#[must_use]
+pub fn mandarin() -> PhonemeInventory {
+    use Backness::*;
+    use Height::*;
+    use Manner::*;
+    use Place::*;
+
+    PhonemeInventoryBuilder::with_capacity("zh", "Mandarin Chinese", 28)
+        .stress(StressPattern::Tonal)
+        .tones(vec![
+            Cow::Borrowed("˥˥"),  // tone 1: high level
+            Cow::Borrowed("˧˥"),  // tone 2: rising
+            Cow::Borrowed("˨˩˦"), // tone 3: dipping
+            Cow::Borrowed("˥˩"),  // tone 4: falling
+            Cow::Borrowed("˧"),   // neutral tone
+        ])
+        // Bilabials
+        .consonant("p", Plosive, Bilabial, false)
+        .consonant("pʰ", Plosive, Bilabial, false)
+        .consonant("m", Nasal, Bilabial, true)
+        .consonant("f", Fricative, Labiodental, false)
+        // Alveolars
+        .consonant("t", Plosive, Alveolar, false)
+        .consonant("tʰ", Plosive, Alveolar, false)
+        .consonant("n", Nasal, Alveolar, true)
+        .consonant("l", LateralApproximant, Alveolar, true)
+        // Alveolar sibilants
+        .consonant("t͡s", Affricate, Alveolar, false)
+        .consonant("t͡sʰ", Affricate, Alveolar, false)
+        .consonant("s", Fricative, Alveolar, false)
+        // Retroflex sibilants
+        .consonant("ʈ͡ʂ", Affricate, Retroflex, false)
+        .consonant("ʈ͡ʂʰ", Affricate, Retroflex, false)
+        .consonant("ʂ", Fricative, Retroflex, false)
+        .consonant("ɻ", Approximant, Retroflex, true)
+        // Palatals (from velar/alveolar before front vowels)
+        .consonant("t͡ɕ", Affricate, Palatal, false)
+        .consonant("t͡ɕʰ", Affricate, Palatal, false)
+        .consonant("ɕ", Fricative, Palatal, false)
+        // Velars
+        .consonant("k", Plosive, Velar, false)
+        .consonant("kʰ", Plosive, Velar, false)
+        .consonant("x", Fricative, Velar, false)
+        // Vowels (nuclear vowels of the syllable finals)
+        .vowel("a", Open, Central, false)
+        .vowel("o", CloseMid, Back, true)
+        .vowel("ɤ", CloseMid, Back, false)
+        .vowel("e", OpenMid, Front, false)
+        .vowel("i", Close, Front, false)
+        .vowel("u", Close, Back, true)
+        .vowel("y", Close, Front, true)
+        .build()
+}
+
+/// Build the Hindi phoneme inventory.
+///
+/// Standard Hindi (Khariboli). Full aspirated and retroflex series.
+/// ~34 consonants + 10 vowels (short/long pairs + schwa). Stress: free.
+#[must_use]
+pub fn hindi() -> PhonemeInventory {
+    use Backness::*;
+    use Height::*;
+    use Manner::*;
+    use Place::*;
+
+    PhonemeInventoryBuilder::with_capacity("hi", "Hindi", 44)
+        .stress(StressPattern::Free)
+        // Velars
+        .consonant("k", Plosive, Velar, false)
+        .consonant("kʰ", Plosive, Velar, false)
+        .consonant("ɡ", Plosive, Velar, true)
+        .consonant("ɡʱ", Plosive, Velar, true)
+        .consonant("ŋ", Nasal, Velar, true)
+        // Palatals
+        .consonant("t͡ɕ", Affricate, Palatal, false)
+        .consonant("t͡ɕʰ", Affricate, Palatal, false)
+        .consonant("d͡ʑ", Affricate, Palatal, true)
+        .consonant("d͡ʑʱ", Affricate, Palatal, true)
+        .consonant("ɲ", Nasal, Palatal, true)
+        // Retroflexes
+        .consonant("ʈ", Plosive, Retroflex, false)
+        .consonant("ʈʰ", Plosive, Retroflex, false)
+        .consonant("ɖ", Plosive, Retroflex, true)
+        .consonant("ɖʱ", Plosive, Retroflex, true)
+        .consonant("ɳ", Nasal, Retroflex, true)
+        // Dentals
+        .consonant("t̪", Plosive, Dental, false)
+        .consonant("t̪ʰ", Plosive, Dental, false)
+        .consonant("d̪", Plosive, Dental, true)
+        .consonant("d̪ʱ", Plosive, Dental, true)
+        .consonant("n", Nasal, Alveolar, true)
+        // Bilabials
+        .consonant("p", Plosive, Bilabial, false)
+        .consonant("pʰ", Plosive, Bilabial, false)
+        .consonant("b", Plosive, Bilabial, true)
+        .consonant("bʱ", Plosive, Bilabial, true)
+        .consonant("m", Nasal, Bilabial, true)
+        // Approximants & liquids
+        .consonant("j", Approximant, Palatal, true)
+        .consonant("r", TapFlap, Alveolar, true)
+        .consonant("l", LateralApproximant, Alveolar, true)
+        .consonant("ʋ", Approximant, Labiodental, true)
+        // Fricatives
+        .consonant("ɕ", Fricative, Palatal, false)
+        .consonant("ʂ", Fricative, Retroflex, false)
+        .consonant("s", Fricative, Alveolar, false)
+        .consonant("ɦ", Fricative, Glottal, true)
+        // Borrowed / marginal
+        .consonant("f", Fricative, Labiodental, false)
+        // Vowels (short and long pairs + schwa)
+        .vowel("ə", Mid, Central, false) // inherent schwa
+        .vowel("i", Close, Front, false)
+        .vowel("iː", Close, Front, false)
+        .vowel("u", Close, Back, true)
+        .vowel("uː", Close, Back, true)
+        .vowel("e", CloseMid, Front, false)
+        .vowel("eː", CloseMid, Front, false)
+        .vowel("ɛː", OpenMid, Front, false)
+        .vowel("o", CloseMid, Back, true)
+        .vowel("ɔː", OpenMid, Back, true)
+        .build()
+}
+
+/// Build the Japanese phoneme inventory.
+///
+/// Standard Tokyo Japanese. Mora-timed with pitch accent.
+/// ~15 consonants + 5 vowels. Stress: pitch accent.
+#[must_use]
+pub fn japanese() -> PhonemeInventory {
+    use Backness::*;
+    use Height::*;
+    use Manner::*;
+    use Place::*;
+
+    PhonemeInventoryBuilder::with_capacity("ja", "Japanese", 20)
+        .stress(StressPattern::PitchAccent)
+        // Plosives
+        .consonant("p", Plosive, Bilabial, false)
+        .consonant("b", Plosive, Bilabial, true)
+        .consonant("t", Plosive, Alveolar, false)
+        .consonant("d", Plosive, Alveolar, true)
+        .consonant("k", Plosive, Velar, false)
+        .consonant("ɡ", Plosive, Velar, true)
+        // Affricates (allophonic before /i/, /u/ — treated as separate in inventory)
+        .consonant("t͡s", Affricate, Alveolar, false)
+        .consonant("t͡ɕ", Affricate, Palatal, false)
+        .consonant("d͡ʑ", Affricate, Palatal, true)
+        // Fricatives
+        .consonant("ɸ", Fricative, Bilabial, false)
+        .consonant("s", Fricative, Alveolar, false)
+        .consonant("z", Fricative, Alveolar, true)
+        .consonant("ɕ", Fricative, Palatal, false)
+        .consonant("h", Fricative, Glottal, false)
+        // Nasals
+        .consonant("m", Nasal, Bilabial, true)
+        .consonant("n", Nasal, Alveolar, true)
+        .consonant("ŋ", Nasal, Velar, true)
+        // Approximants & liquids
+        .consonant("ɾ", TapFlap, Alveolar, true)
+        .consonant("j", Approximant, Palatal, true)
+        .consonant("w", Approximant, LabialVelar, true)
+        // Vowels (5-vowel system)
+        .vowel("i", Close, Front, false)
+        .vowel("e", CloseMid, Front, false)
+        .vowel("a", Open, Central, false)
+        .vowel("o", CloseMid, Back, true)
+        .vowel("u", Close, Back, false) // unrounded in standard Japanese
+        .build()
+}
+
+/// Build the Spanish (Castilian) phoneme inventory.
+///
+/// Standard peninsular Spanish. 19 consonants + 5 vowels. Stress: free.
+#[must_use]
+pub fn spanish() -> PhonemeInventory {
+    use Backness::*;
+    use Height::*;
+    use Manner::*;
+    use Place::*;
+
+    PhonemeInventoryBuilder::with_capacity("es", "Spanish", 24)
+        .stress(StressPattern::Free)
+        // Plosives
+        .consonant("p", Plosive, Bilabial, false)
+        .consonant("b", Plosive, Bilabial, true)
+        .consonant("t", Plosive, Dental, false)
+        .consonant("d", Plosive, Dental, true)
+        .consonant("k", Plosive, Velar, false)
+        .consonant("ɡ", Plosive, Velar, true)
+        // Affricates
+        .consonant("t͡ʃ", Affricate, Postalveolar, false)
+        // Fricatives
+        .consonant("f", Fricative, Labiodental, false)
+        .consonant("θ", Fricative, Dental, false) // Castilian /c/ and /z/
+        .consonant("s", Fricative, Alveolar, false)
+        .consonant("x", Fricative, Velar, false)
+        .consonant("β", Fricative, Bilabial, true) // allophone of /b/
+        .consonant("ð", Fricative, Dental, true) // allophone of /d/
+        .consonant("ɣ", Fricative, Velar, true) // allophone of /g/
+        // Nasals
+        .consonant("m", Nasal, Bilabial, true)
+        .consonant("n", Nasal, Alveolar, true)
+        .consonant("ɲ", Nasal, Palatal, true)
+        // Liquids
+        .consonant("l", LateralApproximant, Alveolar, true)
+        .consonant("ʎ", LateralApproximant, Palatal, true)
+        .consonant("r", TapFlap, Alveolar, true)
+        .consonant("rr", Trill, Alveolar, true)
+        // Approximants
+        .consonant("j", Approximant, Palatal, true)
+        .consonant("w", Approximant, LabialVelar, true)
+        // Vowels
+        .vowel("i", Close, Front, false)
+        .vowel("e", CloseMid, Front, false)
+        .vowel("a", Open, Central, false)
+        .vowel("o", CloseMid, Back, true)
+        .vowel("u", Close, Back, true)
+        .build()
+}
+
+/// Build the French phoneme inventory.
+///
+/// Standard Parisian French. ~20 consonants + 16 vowels (oral + nasal + schwa).
+/// Stress: fixed (final syllable).
+#[must_use]
+pub fn french() -> PhonemeInventory {
+    use Backness::*;
+    use Height::*;
+    use Manner::*;
+    use Place::*;
+
+    PhonemeInventoryBuilder::with_capacity("fr", "French", 36)
+        .stress(StressPattern::Fixed)
+        // Plosives
+        .consonant("p", Plosive, Bilabial, false)
+        .consonant("b", Plosive, Bilabial, true)
+        .consonant("t", Plosive, Alveolar, false)
+        .consonant("d", Plosive, Alveolar, true)
+        .consonant("k", Plosive, Velar, false)
+        .consonant("ɡ", Plosive, Velar, true)
+        // Fricatives
+        .consonant("f", Fricative, Labiodental, false)
+        .consonant("v", Fricative, Labiodental, true)
+        .consonant("s", Fricative, Alveolar, false)
+        .consonant("z", Fricative, Alveolar, true)
+        .consonant("ʃ", Fricative, Postalveolar, false)
+        .consonant("ʒ", Fricative, Postalveolar, true)
+        // Nasals
+        .consonant("m", Nasal, Bilabial, true)
+        .consonant("n", Nasal, Alveolar, true)
+        .consonant("ɲ", Nasal, Palatal, true)
+        .consonant("ŋ", Nasal, Velar, true)
+        // Liquids
+        .consonant("l", LateralApproximant, Alveolar, true)
+        .consonant("ʁ", Fricative, Uvular, true)
+        // Approximants (semi-vowels)
+        .consonant("j", Approximant, Palatal, true)
+        .consonant("w", Approximant, LabialVelar, true)
+        .consonant("ɥ", Approximant, Palatal, true) // labial-palatal
+        // Oral vowels
+        .vowel("i", Close, Front, false)
+        .vowel("e", CloseMid, Front, false)
+        .vowel("ɛ", OpenMid, Front, false)
+        .vowel("a", Open, Front, false)
+        .vowel("ɑ", Open, Back, false)
+        .vowel("y", Close, Front, true)
+        .vowel("ø", CloseMid, Front, true)
+        .vowel("œ", OpenMid, Front, true)
+        .vowel("ə", Mid, Central, false)
+        .vowel("u", Close, Back, true)
+        .vowel("o", CloseMid, Back, true)
+        .vowel("ɔ", OpenMid, Back, true)
+        // Nasal vowels
+        .vowel("ɛ̃", OpenMid, Front, false)
+        .vowel("ɑ̃", Open, Back, false)
+        .vowel("œ̃", OpenMid, Front, true)
+        .vowel("ɔ̃", OpenMid, Back, true)
+        .build()
+}
+
+/// Build the German (Standard) phoneme inventory.
+///
+/// Standard High German. ~22 consonants + 15 vowels (short/long pairs + schwa).
+/// Stress: free (root-initial tendency).
+#[must_use]
+pub fn german() -> PhonemeInventory {
+    use Backness::*;
+    use Height::*;
+    use Manner::*;
+    use Place::*;
+
+    PhonemeInventoryBuilder::with_capacity("de", "German", 37)
+        .stress(StressPattern::Free)
+        // Plosives
+        .consonant("p", Plosive, Bilabial, false)
+        .consonant("b", Plosive, Bilabial, true)
+        .consonant("t", Plosive, Alveolar, false)
+        .consonant("d", Plosive, Alveolar, true)
+        .consonant("k", Plosive, Velar, false)
+        .consonant("ɡ", Plosive, Velar, true)
+        // Affricates
+        .consonant("t͡s", Affricate, Alveolar, false)
+        .consonant("p͡f", Affricate, Labiodental, false)
+        .consonant("t͡ʃ", Affricate, Postalveolar, false)
+        // Fricatives
+        .consonant("f", Fricative, Labiodental, false)
+        .consonant("v", Fricative, Labiodental, true)
+        .consonant("s", Fricative, Alveolar, false)
+        .consonant("z", Fricative, Alveolar, true)
+        .consonant("ʃ", Fricative, Postalveolar, false)
+        .consonant("ç", Fricative, Palatal, false) // ich-Laut
+        .consonant("x", Fricative, Velar, false) // ach-Laut
+        .consonant("h", Fricative, Glottal, false)
+        .consonant("ʁ", Fricative, Uvular, true)
+        // Nasals
+        .consonant("m", Nasal, Bilabial, true)
+        .consonant("n", Nasal, Alveolar, true)
+        .consonant("ŋ", Nasal, Velar, true)
+        // Liquids & approximants
+        .consonant("l", LateralApproximant, Alveolar, true)
+        .consonant("j", Approximant, Palatal, true)
+        // Short vowels
+        .vowel("ɪ", NearClose, Front, false)
+        .vowel("ɛ", OpenMid, Front, false)
+        .vowel("a", Open, Central, false)
+        .vowel("ɔ", OpenMid, Back, true)
+        .vowel("ʊ", NearClose, Back, true)
+        .vowel("ʏ", NearClose, Front, true)
+        .vowel("œ", OpenMid, Front, true)
+        .vowel("ə", Mid, Central, false)
+        // Long vowels
+        .vowel("iː", Close, Front, false)
+        .vowel("eː", CloseMid, Front, false)
+        .vowel("ɛː", OpenMid, Front, false)
+        .vowel("aː", Open, Central, false)
+        .vowel("oː", CloseMid, Back, true)
+        .vowel("uː", Close, Back, true)
+        .vowel("yː", Close, Front, true)
+        .vowel("øː", CloseMid, Front, true)
+        .build()
+}
+
+/// Build the Russian phoneme inventory.
+///
+/// Standard Russian (Moscow norm). Extensive palatalization: hard/soft pairs.
+/// ~32 consonants + 6 vowels. Stress: free (contrastive).
+#[must_use]
+pub fn russian() -> PhonemeInventory {
+    use Backness::*;
+    use Height::*;
+    use Manner::*;
+    use Place::*;
+
+    PhonemeInventoryBuilder::with_capacity("ru", "Russian", 38)
+        .stress(StressPattern::Free)
+        // Plosives (plain / palatalized pairs)
+        .consonant("p", Plosive, Bilabial, false)
+        .consonant("pʲ", Plosive, Bilabial, false)
+        .consonant("b", Plosive, Bilabial, true)
+        .consonant("bʲ", Plosive, Bilabial, true)
+        .consonant("t", Plosive, Dental, false)
+        .consonant("tʲ", Plosive, Dental, false)
+        .consonant("d", Plosive, Dental, true)
+        .consonant("dʲ", Plosive, Dental, true)
+        .consonant("k", Plosive, Velar, false)
+        .consonant("kʲ", Plosive, Velar, false)
+        .consonant("ɡ", Plosive, Velar, true)
+        .consonant("ɡʲ", Plosive, Velar, true)
+        // Affricates
+        .consonant("t͡s", Affricate, Alveolar, false)
+        .consonant("t͡ɕ", Affricate, Palatal, false)
+        // Fricatives (plain / palatalized pairs)
+        .consonant("f", Fricative, Labiodental, false)
+        .consonant("fʲ", Fricative, Labiodental, false)
+        .consonant("v", Fricative, Labiodental, true)
+        .consonant("vʲ", Fricative, Labiodental, true)
+        .consonant("s", Fricative, Alveolar, false)
+        .consonant("sʲ", Fricative, Alveolar, false)
+        .consonant("z", Fricative, Alveolar, true)
+        .consonant("zʲ", Fricative, Alveolar, true)
+        .consonant("ʃ", Fricative, Postalveolar, false)
+        .consonant("ʒ", Fricative, Postalveolar, true)
+        .consonant("ɕː", Fricative, Palatal, false) // щ
+        .consonant("x", Fricative, Velar, false)
+        .consonant("xʲ", Fricative, Velar, false)
+        // Nasals
+        .consonant("m", Nasal, Bilabial, true)
+        .consonant("mʲ", Nasal, Bilabial, true)
+        .consonant("n", Nasal, Alveolar, true)
+        .consonant("nʲ", Nasal, Alveolar, true)
+        // Liquids & approximants
+        .consonant("l", LateralApproximant, Alveolar, true)
+        .consonant("lʲ", LateralApproximant, Alveolar, true)
+        .consonant("r", Trill, Alveolar, true)
+        .consonant("rʲ", Trill, Alveolar, true)
+        .consonant("j", Approximant, Palatal, true)
+        // Vowels (6-vowel system: stressed realisations)
+        .vowel("i", Close, Front, false)
+        .vowel("ɨ", Close, Central, false)
+        .vowel("u", Close, Back, true)
+        .vowel("e", CloseMid, Front, false)
+        .vowel("o", CloseMid, Back, true)
+        .vowel("a", Open, Central, false)
+        .build()
+}
+
+/// Build the Korean phoneme inventory.
+///
+/// Standard Korean (Seoul). Three-way plosive contrast (lax/aspirated/tense).
+/// ~19 consonants + 7 vowels. No lexical stress.
+#[must_use]
+pub fn korean() -> PhonemeInventory {
+    use Backness::*;
+    use Height::*;
+    use Manner::*;
+    use Place::*;
+
+    PhonemeInventoryBuilder::with_capacity("ko", "Korean", 26)
+        .stress(StressPattern::Fixed)
+        // Plosives: lax / aspirated / tense triads
+        .consonant("p", Plosive, Bilabial, false)
+        .consonant("pʰ", Plosive, Bilabial, false)
+        .consonant("p͈", Plosive, Bilabial, false) // tense (ㅃ)
+        .consonant("t", Plosive, Alveolar, false)
+        .consonant("tʰ", Plosive, Alveolar, false)
+        .consonant("t͈", Plosive, Alveolar, false) // tense (ㄸ)
+        .consonant("k", Plosive, Velar, false)
+        .consonant("kʰ", Plosive, Velar, false)
+        .consonant("k͈", Plosive, Velar, false) // tense (ㄲ)
+        // Affricate: lax / aspirated / tense
+        .consonant("t͡ɕ", Affricate, Palatal, false)
+        .consonant("t͡ɕʰ", Affricate, Palatal, false)
+        .consonant("t͡ɕ͈", Affricate, Palatal, false) // tense (ㅉ)
+        // Fricatives: lax / tense
+        .consonant("s", Fricative, Alveolar, false)
+        .consonant("s͈", Fricative, Alveolar, false) // tense (ㅆ)
+        .consonant("h", Fricative, Glottal, false)
+        // Nasals
+        .consonant("m", Nasal, Bilabial, true)
+        .consonant("n", Nasal, Alveolar, true)
+        .consonant("ŋ", Nasal, Velar, true)
+        // Liquid
+        .consonant("ɾ", TapFlap, Alveolar, true)
+        // Vowels (basic monophthongs)
+        .vowel("i", Close, Front, false)
+        .vowel("e", CloseMid, Front, false)
+        .vowel("ɛ", OpenMid, Front, false)
+        .vowel("a", Open, Central, false)
+        .vowel("o", CloseMid, Back, true)
+        .vowel("u", Close, Back, true)
+        .vowel("ɯ", Close, Back, false)
+        .build()
+}
+
+/// Build the Portuguese (European) phoneme inventory.
+///
+/// European Portuguese. Includes oral and nasal vowels.
+/// ~19 consonants + 14 vowels (oral + nasal). Stress: free.
+#[must_use]
+pub fn portuguese() -> PhonemeInventory {
+    use Backness::*;
+    use Height::*;
+    use Manner::*;
+    use Place::*;
+
+    PhonemeInventoryBuilder::with_capacity("pt", "Portuguese", 33)
+        .stress(StressPattern::Free)
+        // Plosives
+        .consonant("p", Plosive, Bilabial, false)
+        .consonant("b", Plosive, Bilabial, true)
+        .consonant("t", Plosive, Dental, false)
+        .consonant("d", Plosive, Dental, true)
+        .consonant("k", Plosive, Velar, false)
+        .consonant("ɡ", Plosive, Velar, true)
+        // Affricates
+        .consonant("t͡ʃ", Affricate, Postalveolar, false)
+        .consonant("d͡ʒ", Affricate, Postalveolar, true)
+        // Fricatives
+        .consonant("f", Fricative, Labiodental, false)
+        .consonant("v", Fricative, Labiodental, true)
+        .consonant("s", Fricative, Alveolar, false)
+        .consonant("z", Fricative, Alveolar, true)
+        .consonant("ʃ", Fricative, Postalveolar, false)
+        .consonant("ʒ", Fricative, Postalveolar, true)
+        // Nasals
+        .consonant("m", Nasal, Bilabial, true)
+        .consonant("n", Nasal, Alveolar, true)
+        .consonant("ɲ", Nasal, Palatal, true)
+        // Liquids & approximants
+        .consonant("l", LateralApproximant, Alveolar, true)
+        .consonant("ʎ", LateralApproximant, Palatal, true)
+        .consonant("r", TapFlap, Alveolar, true) // flap /r/ (intervocalic)
+        .consonant("ʁ", Fricative, Uvular, true) // strong /r/ (initial / post-nasal)
+        .consonant("j", Approximant, Palatal, true)
+        .consonant("w", Approximant, LabialVelar, true)
+        // Oral vowels
+        .vowel("i", Close, Front, false)
+        .vowel("e", CloseMid, Front, false)
+        .vowel("ɛ", OpenMid, Front, false)
+        .vowel("a", Open, Central, false)
+        .vowel("ɐ", NearOpen, Central, false)
+        .vowel("ɔ", OpenMid, Back, true)
+        .vowel("o", CloseMid, Back, true)
+        .vowel("u", Close, Back, true)
+        .vowel("ɨ", Close, Central, false)
+        // Nasal vowels
+        .vowel("ẽ", CloseMid, Front, false)
+        .vowel("ã", Open, Central, false)
+        .vowel("õ", CloseMid, Back, true)
+        .vowel("ĩ", Close, Front, false)
+        .vowel("ũ", Close, Back, true)
+        .build()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -810,6 +1332,15 @@ mod tests {
     inventory_test!(test_classical_arabic, classical_arabic, "ar", 28, 6);
     inventory_test!(test_koine_greek, koine_greek, "grc", 17, 5);
     inventory_test!(test_literary_chinese, literary_chinese, "lzh", 27, 12);
+    inventory_test!(test_mandarin, mandarin, "zh", 21, 7);
+    inventory_test!(test_hindi, hindi, "hi", 34, 10);
+    inventory_test!(test_japanese, japanese, "ja", 20, 5);
+    inventory_test!(test_spanish, spanish, "es", 23, 5);
+    inventory_test!(test_french, french, "fr", 21, 16);
+    inventory_test!(test_german, german, "de", 23, 16);
+    inventory_test!(test_russian, russian, "ru", 36, 6);
+    inventory_test!(test_korean, korean, "ko", 19, 7);
+    inventory_test!(test_portuguese, portuguese, "pt", 23, 14);
 
     #[test]
     fn test_maya_ejectives() {

@@ -2,6 +2,7 @@
 //! cognate tracking, and etymology.
 
 pub mod cognate;
+pub mod swadesh;
 
 use std::borrow::Cow;
 

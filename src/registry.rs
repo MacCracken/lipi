@@ -109,6 +109,51 @@ pub const REGISTERED: &[LanguageInfo] = &[
         name: "Literary Chinese",
         script_codes: &["Hani"],
     },
+    LanguageInfo {
+        code: "zh",
+        name: "Mandarin Chinese",
+        script_codes: &["Hani"],
+    },
+    LanguageInfo {
+        code: "hi",
+        name: "Hindi",
+        script_codes: &["Deva"],
+    },
+    LanguageInfo {
+        code: "ja",
+        name: "Japanese",
+        script_codes: &["Kana"],
+    },
+    LanguageInfo {
+        code: "es",
+        name: "Spanish",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "fr",
+        name: "French",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "de",
+        name: "German",
+        script_codes: &["Latn"],
+    },
+    LanguageInfo {
+        code: "ru",
+        name: "Russian",
+        script_codes: &["Cyrl"],
+    },
+    LanguageInfo {
+        code: "ko",
+        name: "Korean",
+        script_codes: &["Hang"],
+    },
+    LanguageInfo {
+        code: "pt",
+        name: "Portuguese",
+        script_codes: &["Latn"],
+    },
 ];
 
 /// Look up a language by ISO 639 code.
@@ -142,6 +187,15 @@ pub fn phonemes(code: &str) -> Option<PhonemeInventory> {
         "ar" => Some(classical_arabic()),
         "grc" => Some(koine_greek()),
         "lzh" => Some(literary_chinese()),
+        "zh" => Some(mandarin()),
+        "hi" => Some(hindi()),
+        "ja" => Some(japanese()),
+        "es" => Some(spanish()),
+        "fr" => Some(french()),
+        "de" => Some(german()),
+        "ru" => Some(russian()),
+        "ko" => Some(korean()),
+        "pt" => Some(portuguese()),
         _ => None,
     }
 }
@@ -162,7 +216,7 @@ pub fn primary_script(code: &str) -> Option<Script> {
 pub fn all_codes() -> &'static [&'static str] {
     &[
         "en", "sa", "el", "yua", "sw", "yo", "zu", "th", "vi", "tl", "tr", "fi", "haw", "nah",
-        "la", "ar", "grc", "lzh",
+        "la", "ar", "grc", "lzh", "zh", "hi", "ja", "es", "fr", "de", "ru", "ko", "pt",
     ]
 }
 
@@ -208,7 +262,7 @@ mod tests {
     #[test]
     fn test_all_codes() {
         let codes = all_codes();
-        assert_eq!(codes.len(), 18);
+        assert_eq!(codes.len(), 27);
         assert!(codes.contains(&"en"));
         assert!(codes.contains(&"yua"));
         assert!(codes.contains(&"haw"));
