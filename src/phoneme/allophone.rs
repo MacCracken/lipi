@@ -111,6 +111,10 @@ impl AllophoneRuleSet {
 // ---------------------------------------------------------------------------
 
 /// English allophone rules (General American).
+///
+/// Note: aspiration rules use `WordInitial` as an approximation.
+/// In precise phonology, aspiration occurs syllable-initially before
+/// a stressed vowel (e.g., /p/ in "sport" is NOT aspirated).
 #[must_use]
 pub fn english_allophones() -> AllophoneRuleSet {
     AllophoneRuleSet {

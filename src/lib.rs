@@ -10,9 +10,11 @@
 //! Five modules:
 //!
 //! - [`phoneme`] — IPA phoneme inventories per language, phonological features
-//!   (manner, place, voicing), stress/tone patterns, builder pattern
+//!   (manner, place, voicing), stress/tone patterns, builder pattern,
+//!   allophone rules, syllable structure, phonotactic constraints
 //! - [`script`] — Writing system metadata: alphabet, syllabary, logographic,
-//!   abjad, abugida. Unicode ranges, directionality, lookup by ISO 15924 code
+//!   abjad, abugida. Unicode ranges, directionality, lookup by ISO 15924 code,
+//!   transliteration tables, numeral system mappings
 //! - [`grammar`] — Morphological typology (isolating, agglutinative, fusional),
 //!   word order (SVO/SOV/VSO), case systems
 //! - [`lexicon`] — Core vocabulary per language (Swadesh lists, frequency-ranked

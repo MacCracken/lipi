@@ -235,3 +235,79 @@ fn test_all_scripts_serde_roundtrip() {
         assert_eq!(script, back, "serde roundtrip failed for script {code}");
     }
 }
+
+// ---------------------------------------------------------------------------
+// Allophone rules
+// ---------------------------------------------------------------------------
+
+#[test]
+fn test_allophone_realize_cross_module() {
+    use lipi::phoneme::allophone;
+    let rules = allophone::english_allophones();
+    // Verify allophone realization agrees with phoneme inventory
+    let en = phoneme::english();
+    assert!(en.has("t")); // phoneme exists
+    let realized = rules.realize("t", &allophone::Environment::Intervocalic);
+    assert_eq!(realized, "ɾ");
+    assert!(!en.has("ɾ")); // allophone is NOT in the phoneme inventory
+}
+
+// ---------------------------------------------------------------------------
+// Phonotactics
+// ---------------------------------------------------------------------------
+
+#[test]
+fn test_phonotactics_serde_roundtrip_all() {
+    use lipi::phoneme::syllable;
+    let profiles = [
+        syllable::english_phonotactics(),
+        syllable::sanskrit_phonotactics(),
+        syllable::japanese_phonotactics(),
+    ];
+    for p in &profiles {
+        let json = serde_json::to_string(p).unwrap();
+        let back: syllable::Phonotactics = serde_json::from_str(&json).unwrap();
+        assert_eq!(*p, back, "serde roundtrip failed for {}", p.language_code);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Transliteration
+// ---------------------------------------------------------------------------
+
+#[test]
+fn test_transliteration_greek_roundtrip_chars() {
+    use lipi::script::transliteration;
+    let table = transliteration::greek_beta_code();
+    // Every char in forward map should transliterate correctly
+    for (src, tgt) in &table.forward {
+        assert_eq!(
+            table.transliterate(src),
+            tgt.as_ref(),
+            "failed for {src} → {tgt}"
+        );
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Numerals
+// ---------------------------------------------------------------------------
+
+#[test]
+fn test_numeral_systems_serde_roundtrip() {
+    use lipi::script::numerals;
+    let systems = [numerals::devanagari_digits(), numerals::greek_isopsephy()];
+    for sys in &systems {
+        let json = serde_json::to_string(sys).unwrap();
+        let back: numerals::NumeralSystem = serde_json::from_str(&json).unwrap();
+        assert_eq!(*sys, back, "serde roundtrip failed for {}", sys.name);
+    }
+}
+
+#[test]
+fn test_greek_isopsephy_word_value() {
+    use lipi::script::numerals;
+    let sys = numerals::greek_isopsephy();
+    // "θεος" (theos) = 9 + 5 + 70 + 200 = 284
+    assert_eq!(sys.string_value("θεος"), Some(284));
+}

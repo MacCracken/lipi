@@ -33,6 +33,9 @@ impl TransliterationTable {
     }
 
     /// Build a reverse mapping (target → source) for this table.
+    ///
+    /// When multiple source characters map to the same target (e.g.,
+    /// Devanagari standalone vowel and matra form), the last mapping wins.
     #[must_use]
     pub fn reverse_map(&self) -> HashMap<&str, &str> {
         self.forward
@@ -45,39 +48,32 @@ impl TransliterationTable {
     #[must_use]
     pub fn transliterate(&self, input: &str) -> String {
         tracing::trace!(scheme = %self.scheme, "transliterating");
-        let mut result = String::with_capacity(input.len() * 2);
+        let mut result = String::with_capacity(input.len());
         let mut remaining = input;
 
         while !remaining.is_empty() {
+            // Byte offsets after each of the first 4 chars
+            let char_ends: Vec<usize> = remaining
+                .char_indices()
+                .take(4)
+                .map(|(i, ch)| i + ch.len_utf8())
+                .collect();
+
             let mut matched = false;
-            // Try longest match first (up to 4 chars covers most scripts)
-            for len in (1..=remaining.len().min(4)).rev() {
-                if let Some(end) = remaining
-                    .char_indices()
-                    .nth(len)
-                    .map(|(i, _)| i)
-                    .or_else(|| {
-                        if remaining.chars().count() == len {
-                            Some(remaining.len())
-                        } else {
-                            None
-                        }
-                    })
-                {
-                    let candidate = &remaining[..end];
-                    if let Some(replacement) = self.transliterate_char(candidate) {
-                        result.push_str(replacement);
-                        remaining = &remaining[end..];
-                        matched = true;
-                        break;
-                    }
+            // Try longest match first
+            for &end in char_ends.iter().rev() {
+                let candidate = &remaining[..end];
+                if let Some(replacement) = self.transliterate_char(candidate) {
+                    result.push_str(replacement);
+                    remaining = &remaining[end..];
+                    matched = true;
+                    break;
                 }
             }
             if !matched {
                 // No mapping found — pass through first char unchanged
-                let ch = remaining.chars().next().unwrap();
-                result.push(ch);
-                remaining = &remaining[ch.len_utf8()..];
+                result.push_str(&remaining[..char_ends[0]]);
+                remaining = &remaining[char_ends[0]..];
             }
         }
         result

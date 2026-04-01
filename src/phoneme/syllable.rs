@@ -12,8 +12,6 @@ use serde::{Deserialize, Serialize};
 /// a language permits in onset, nucleus, and coda positions.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SyllableTemplate {
-    /// ISO 639 language code.
-    pub language_code: Cow<'static, str>,
     /// Maximum consonants in the onset (before the vowel).
     pub max_onset: u8,
     /// Maximum consonants in the coda (after the vowel).
@@ -109,6 +107,11 @@ impl Phonotactics {
     }
 
     /// Check if a sequence is explicitly permitted at a given position.
+    ///
+    /// Returns `Some(true)` if found in a `Permitted` constraint,
+    /// `Some(false)` if found in a `Forbidden` constraint, or
+    /// `None` if no constraint mentions this sequence. The first
+    /// matching constraint wins (order-sensitive).
     #[must_use]
     pub fn is_permitted(&self, sequence: &str, position: SyllablePosition) -> Option<bool> {
         for c in &self.constraints {
@@ -134,7 +137,6 @@ pub fn english_phonotactics() -> Phonotactics {
     Phonotactics {
         language_code: Cow::Borrowed("en"),
         syllable: SyllableTemplate {
-            language_code: Cow::Borrowed("en"),
             max_onset: 3,
             max_coda: 4,
             complex_nucleus: true,
@@ -180,7 +182,6 @@ pub fn sanskrit_phonotactics() -> Phonotactics {
     Phonotactics {
         language_code: Cow::Borrowed("sa"),
         syllable: SyllableTemplate {
-            language_code: Cow::Borrowed("sa"),
             max_onset: 2,
             max_coda: 2,
             complex_nucleus: true,
@@ -208,7 +209,6 @@ pub fn japanese_phonotactics() -> Phonotactics {
     Phonotactics {
         language_code: Cow::Borrowed("ja"),
         syllable: SyllableTemplate {
-            language_code: Cow::Borrowed("ja"),
             max_onset: 1,
             max_coda: 1,
             complex_nucleus: true,

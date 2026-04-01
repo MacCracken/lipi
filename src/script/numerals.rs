@@ -66,15 +66,16 @@ impl NumeralSystem {
             .map(|m| m.character.as_ref())
     }
 
-    /// Compute the total numeric value of a string by summing character values.
-    /// Returns `None` if any character has no mapping.
+    /// Compute the additive numeric value of a string by summing individual
+    /// character values. Returns `None` if any character has no mapping.
+    ///
+    /// This is additive (isopsephy/gematria style), not positional.
+    /// For decimal digit strings, the caller must handle place values.
     #[must_use]
     pub fn string_value(&self, s: &str) -> Option<u32> {
         let mut total: u32 = 0;
+        let mut buf = [0u8; 4];
         for ch in s.chars() {
-            let ch_str = &s[ch.len_utf8()..]; // we need the char as a &str
-            let _ = ch_str; // unused, we reconstruct below
-            let mut buf = [0u8; 4];
             let ch_s = ch.encode_utf8(&mut buf);
             total = total.checked_add(self.value_of(ch_s)?)?;
         }
@@ -224,6 +225,10 @@ pub fn greek_isopsephy() -> NumeralSystem {
             },
             NumeralMapping {
                 character: Cow::Borrowed("σ"),
+                value: 200,
+            },
+            NumeralMapping {
+                character: Cow::Borrowed("ς"), // final sigma, same value
                 value: 200,
             },
             NumeralMapping {
