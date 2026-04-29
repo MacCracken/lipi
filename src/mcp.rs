@@ -4,34 +4,10 @@
 //! invoke via MCP. Each tool has a name, description, input parameters,
 //! and a handler that returns JSON-serializable output.
 
-use std::borrow::Cow;
 use std::collections::HashMap;
 
+use bote::{ToolDef, ToolSchema};
 use serde::{Deserialize, Serialize};
-
-/// Description of an MCP tool.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ToolDefinition {
-    /// Tool name (e.g., "varna_phonemes").
-    pub name: Cow<'static, str>,
-    /// Human-readable description.
-    pub description: Cow<'static, str>,
-    /// Parameter descriptions: name → (type, description).
-    pub parameters: Vec<ParameterDef>,
-}
-
-/// A tool parameter definition.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ParameterDef {
-    /// Parameter name.
-    pub name: Cow<'static, str>,
-    /// JSON Schema type (e.g., "string", "integer").
-    pub param_type: Cow<'static, str>,
-    /// Description.
-    pub description: Cow<'static, str>,
-    /// Whether this parameter is required.
-    pub required: bool,
-}
 
 /// Result of an MCP tool invocation.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -45,91 +21,68 @@ pub enum ToolResult {
 
 /// All MCP tool definitions exposed by varna.
 #[must_use]
-pub fn tool_definitions() -> Vec<ToolDefinition> {
+pub fn tool_definitions() -> Vec<ToolDef> {
     vec![
-        ToolDefinition {
-            name: Cow::Borrowed("varna_phonemes"),
-            description: Cow::Borrowed(
-                "Get the phoneme inventory for a language. Returns consonants, vowels, \
-                 stress pattern, and tone system.",
+        ToolDef::new(
+            "varna_phonemes",
+            "Get the phoneme inventory for a language. Returns consonants, vowels, stress pattern, and tone system.",
+            ToolSchema::new(
+                "object",
+                HashMap::from([(
+                    "language".into(),
+                    serde_json::json!({"type": "string", "description": "ISO 639 language code (e.g., 'en', 'ja', 'ar')"}),
+                )]),
+                vec!["language".into()],
             ),
-            parameters: vec![ParameterDef {
-                name: Cow::Borrowed("language"),
-                param_type: Cow::Borrowed("string"),
-                description: Cow::Borrowed("ISO 639 language code (e.g., 'en', 'ja', 'ar')"),
-                required: true,
-            }],
-        },
-        ToolDefinition {
-            name: Cow::Borrowed("varna_script"),
-            description: Cow::Borrowed(
-                "Get writing system metadata for a script. Returns type, direction, \
-                 Unicode ranges, and status.",
+        ),
+        ToolDef::new(
+            "varna_script",
+            "Get writing system metadata for a script. Returns type, direction, Unicode ranges, and status.",
+            ToolSchema::new(
+                "object",
+                HashMap::from([(
+                    "code".into(),
+                    serde_json::json!({"type": "string", "description": "ISO 15924 script code (e.g., 'Latn', 'Arab', 'Deva')"}),
+                )]),
+                vec!["code".into()],
             ),
-            parameters: vec![ParameterDef {
-                name: Cow::Borrowed("code"),
-                param_type: Cow::Borrowed("string"),
-                description: Cow::Borrowed("ISO 15924 script code (e.g., 'Latn', 'Arab', 'Deva')"),
-                required: true,
-            }],
-        },
-        ToolDefinition {
-            name: Cow::Borrowed("varna_grammar"),
-            description: Cow::Borrowed(
-                "Get the grammatical profile for a language. Returns morphology type, \
-                 word order, case count, gender, and classifier usage.",
+        ),
+        ToolDef::new(
+            "varna_grammar",
+            "Get the grammatical profile for a language. Returns morphology type, word order, case count, gender, and classifier usage.",
+            ToolSchema::new(
+                "object",
+                HashMap::from([(
+                    "language".into(),
+                    serde_json::json!({"type": "string", "description": "ISO 639 language code (e.g., 'de', 'ja', 'ru')"}),
+                )]),
+                vec!["language".into()],
             ),
-            parameters: vec![ParameterDef {
-                name: Cow::Borrowed("language"),
-                param_type: Cow::Borrowed("string"),
-                description: Cow::Borrowed("ISO 639 language code (e.g., 'de', 'ja', 'ru')"),
-                required: true,
-            }],
-        },
-        ToolDefinition {
-            name: Cow::Borrowed("varna_translate_ipa"),
-            description: Cow::Borrowed(
-                "Transliterate text between scripts. Supports Devanagari↔IAST \
-                 and Greek↔Beta Code.",
+        ),
+        ToolDef::new(
+            "varna_translate_ipa",
+            "Transliterate text between scripts. Supports Devanagari↔IAST and Greek↔Beta Code.",
+            ToolSchema::new(
+                "object",
+                HashMap::from([
+                    ("text".into(), serde_json::json!({"type": "string", "description": "Text to transliterate"})),
+                    ("scheme".into(), serde_json::json!({"type": "string", "description": "Transliteration scheme: 'devanagari_iast' or 'greek_beta'"})),
+                ]),
+                vec!["text".into(), "scheme".into()],
             ),
-            parameters: vec![
-                ParameterDef {
-                    name: Cow::Borrowed("text"),
-                    param_type: Cow::Borrowed("string"),
-                    description: Cow::Borrowed("Text to transliterate"),
-                    required: true,
-                },
-                ParameterDef {
-                    name: Cow::Borrowed("scheme"),
-                    param_type: Cow::Borrowed("string"),
-                    description: Cow::Borrowed(
-                        "Transliteration scheme: 'devanagari_iast' or 'greek_beta'",
-                    ),
-                    required: true,
-                },
-            ],
-        },
-        ToolDefinition {
-            name: Cow::Borrowed("varna_compare"),
-            description: Cow::Borrowed(
-                "Compare two languages. Returns shared/unique phonemes, typological \
-                 differences, and cognate information.",
+        ),
+        ToolDef::new(
+            "varna_compare",
+            "Compare two languages. Returns shared/unique phonemes, typological differences, and cognate information.",
+            ToolSchema::new(
+                "object",
+                HashMap::from([
+                    ("lang1".into(), serde_json::json!({"type": "string", "description": "First language ISO 639 code"})),
+                    ("lang2".into(), serde_json::json!({"type": "string", "description": "Second language ISO 639 code"})),
+                ]),
+                vec!["lang1".into(), "lang2".into()],
             ),
-            parameters: vec![
-                ParameterDef {
-                    name: Cow::Borrowed("lang1"),
-                    param_type: Cow::Borrowed("string"),
-                    description: Cow::Borrowed("First language ISO 639 code"),
-                    required: true,
-                },
-                ParameterDef {
-                    name: Cow::Borrowed("lang2"),
-                    param_type: Cow::Borrowed("string"),
-                    description: Cow::Borrowed("Second language ISO 639 code"),
-                    required: true,
-                },
-            ],
-        },
+        ),
     ]
 }
 
@@ -298,12 +251,20 @@ mod tests {
     #[test]
     fn test_tool_names() {
         let tools = tool_definitions();
-        let names: Vec<&str> = tools.iter().map(|t| t.name.as_ref()).collect();
+        let names: Vec<&str> = tools.iter().map(|t| t.name.as_str()).collect();
         assert!(names.contains(&"varna_phonemes"));
         assert!(names.contains(&"varna_script"));
         assert!(names.contains(&"varna_grammar"));
         assert!(names.contains(&"varna_translate_ipa"));
         assert!(names.contains(&"varna_compare"));
+    }
+
+    #[test]
+    fn test_tool_schemas_are_valid() {
+        for tool in tool_definitions() {
+            assert_eq!(tool.input_schema.schema_type, "object");
+            assert!(!tool.description.is_empty());
+        }
     }
 
     #[test]
@@ -402,7 +363,7 @@ mod tests {
     fn test_tool_definitions_serde() {
         let tools = tool_definitions();
         let json = serde_json::to_string(&tools).unwrap();
-        let back: Vec<ToolDefinition> = serde_json::from_str(&json).unwrap();
+        let back: Vec<ToolDef> = serde_json::from_str(&json).unwrap();
         assert_eq!(back.len(), 5);
     }
 }

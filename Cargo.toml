@@ -16,6 +16,7 @@ exclude = [".claude/", ".github/", "docs/", "scripts/"]
 [dependencies]
 serde = { version = "1", default-features = false, features = ["derive", "alloc"] }
 serde_json = { version = "1", optional = true }
+bote = { path = "../bote", optional = true }
 thiserror = { version = "2", default-features = false }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"], optional = true }
@@ -29,7 +30,7 @@ default = ["std"]
 std = ["serde/std", "thiserror/std"]
 full = ["std", "logging", "mcp", "daimon", "hoosh"]
 logging = ["dep:tracing-subscriber"]
-mcp = ["std", "dep:serde_json"]
+mcp = ["std", "dep:serde_json", "dep:bote"]
 daimon = ["std", "dep:serde_json"]
 hoosh = ["std", "dep:serde_json"]
 
